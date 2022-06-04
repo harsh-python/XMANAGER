@@ -13,7 +13,7 @@
 </p>
 <p align="center">
     <a href="#installation">INSTALLATION</a> :
-    <a href="#links">LINKS</a> :
+    <a href="#🔗 links">LINKS</a> :
     <a href="#license">LICENSE</a>
 </p>
 
