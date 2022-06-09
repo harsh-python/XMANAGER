@@ -2,6 +2,7 @@ import time
 from tkinter import *
 import json
 import os
+import shutil
 
 # creating folders
 os.system("md X_SERVER")
@@ -10,12 +11,16 @@ os.system("move J .//X_SERVER")
 os.system('attrib +h +s +r X_SERVER')
 file = open("settings.json","w")
 file.close()
-
+file = open("./X_SERVER/pass.json","w")
+file.close()
+shutil.copyfile("./icon.ico","./X_SERVER/icon.ico")
+shutil.move('./key_check.py','./X_SERVER/key_check.py')
 
 class Setup:
-    def __init__(self,user,color) -> None:
+    def __init__(self,user,color,key) -> None:
         self.user = user
         self.color = color
+        self.key = key
 
     def set_user(self):
         #reading file
@@ -37,6 +42,17 @@ class Setup:
         self.name_data = json.dumps(self.v)
         # print(name_data)
         self.file = open("settings.json",'w')
+        self.data = self.file.write(self.name_data)
+        self.file.close()
+    def set_key(self):
+        # reading file
+        self.v = {
+            "key":self.key,
+            "exitnum":0
+        }
+        self.name_data = json.dumps(self.v)
+        # print(name_data)
+        self.file = open("./X_SERVER/pass.json",'w')
         self.data = self.file.write(self.name_data)
         self.file.close()
 
@@ -66,15 +82,19 @@ def bttn(win,text,w,h,bcolor,fcolor,cmd):
 
 def set1():
             name = input2.get()
-            set1 = Setup(name,accent_color)
+            num = input3.get()
+            set1 = Setup(name,accent_color,num)
             set1.set_user()
             set1.set_accent()
+            set1.set_key()
             input2.delete(0,'end')
             time.sleep(1)
+            shutil.copyfile("./settings.json","./X_SERVER/settings.json")
             root.destroy()
 
 username = "ADMIN"
 accent_color = "white"
+key1 = "1234"
 
 def setw():
     global accent_color
@@ -111,8 +131,16 @@ atitle_lb2 = Label(root,text="ENTER YOUR NAME", font=('Modern',15,'bold'))
 atitle_lb2.config(bg='black',fg='white')
 atitle_lb2.pack()
 
-input2 = Entry(root,bg="white",width=40)
+input2 = Entry(root,bg="white",width=40,justify='center',border=0)
 input2.pack(pady=10,padx=10)
+
+atitle_lb4 = Label(root,text="ENTER YOUR PASSWORD", font=('Modern',15,'bold'))
+atitle_lb4.config(bg='black',fg='white')
+atitle_lb4.pack()
+
+input3 = Entry(root,bg="white",width=40,show="●",justify='center',border=0)
+input3.pack(pady=10,padx=10)
+
 atitle_lb3 = Label(root,text="SELECT YOUR COLOR", font=('Modern',15,'bold'))
 atitle_lb3.config(bg='black',fg='white')
 atitle_lb3.pack()
