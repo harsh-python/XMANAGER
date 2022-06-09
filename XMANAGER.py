@@ -3,6 +3,7 @@ XMANAGER
 Server Based File Manager
 """
 import os
+import json
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
@@ -17,6 +18,37 @@ goto_dir = '\X_SERVER\J'
 main_dir = CURR_DIR+goto_dir
 
 try:
+    # json setting file
+    import json
+    # reading file
+    set_file = open('settings.json','r')
+    data = set_file.read()
+    set_file.close()
+    #setting color
+    setcolor = json.loads(data)   # loading color
+    accent_color = setcolor["accent_color"] # font color
+    ##################################################################
+    # writing accent color for settings.json in x server
+    # writting file
+    v2 = {"accent_color":accent_color}
+    datadump = json.dumps(v2)
+    set_file = open('./X_SERVER/settings.json','w')
+    data = set_file.write(datadump)
+    set_file.close()
+
+    ###################################################################
+    os.system(f'{CURR_DIR}\\X_SERVER\\key_check.py')
+    #############################################################
+    check2 = open("./X_SERVER/pass.json",'r') ### this code is for to check that the program should stop or to continue
+    checkdata = check2.read()
+    check2.close()
+    setcheck2 = json.loads(checkdata)
+    exitnum2 = setcheck2["exitnum"]
+    if exitnum2 == 0:
+        pass
+    elif exitnum2 == 1:
+        exit()
+    #############################################################
     # button with style
     def bttn(win,text,w,h,bcolor,fcolor,cmd):
 
@@ -43,18 +75,8 @@ try:
 
 
 
-    # json setting file
-    import json
-    # reading file
-    set_file = open('settings.json','r')
-    data = set_file.read()
-    set_file.close()
-    #setting color
-    setcolor = json.loads(data)   # loading color
-    accent_color = setcolor["accent_color"] # font color
-    # print(accent_color)
-    #                                  changing color
-    #                           changing color setting class
+    # changing color
+    # changing color setting class
     class Changecolor:
         def __init__(self, a_color): # a_color is accent_color
             self.a_color = a_color
@@ -314,14 +336,49 @@ try:
             text_lb = Label(rootu,text='ENTER YOUR USERNAME', font=('Modern',24,'bold'))
             text_lb.config(bg='black',fg=accent_color)
             text_lb.pack()
-            input2 = Entry(rootu,bg=accent_color,width=40)
+            input2 = Entry(rootu,bg=accent_color,width=40,border=0,justify="center")
             input2.pack(pady=10,padx=10)
             bttn(rootu,"SET",20,1,"black",accent_color,set2)
 
             rootu.mainloop()
         
+        def change_pass():
+            root1 = Tk()
+            root1.title("CHANGE PASSWORD")
+            root1.iconbitmap(r".//icon.ico")
+            root1.geometry('400x250')
+            root1.resizable(False,False)
+            root1.config(bg="black")
+
+            def set4():
+                try:
+                    keyvar = input2.get()
+                    v = {
+                        "key":keyvar,
+                        "exitnum":exitnum2
+                    }
+                    filed = json.dumps(v)
+                    file = open("./X_SERVER/pass.json",'w')
+                    file.write(filed)
+                    file.close()
+                    messagebox.showinfo("PASSWORD","PASSWORD CHANGED!!!")
+                    root1.destroy()
+                except:
+                    messagebox.showerror("PASSWORD",'PASSWORD CANNOT BE CHANGED')
+            
+            text_lb = Label(root1,text='ENTER YOUR PASSWORD', font=('Modern',24,'bold'))
+            text_lb.config(bg='black',fg=accent_color)
+            text_lb.pack()
+            input2 = Entry(root1,bg=accent_color,width=40,border=0,justify="center")
+            input2.pack(pady=10,padx=10)
+            bttn(root1,"SET",20,1,"black",accent_color,set4)
+            
+            root1.mainloop()
+
+        
         bttn(root3,"SET ACCENT",20,1,"black",accent_color,set_accent)
         bttn(root3,"CHANGE NAME",20,1,"black",accent_color,username_ch)
+        bttn(root3,"CHANGE PASSWORD",20,1,"black",accent_color,change_pass)
         close_btn = Button(root3,width=10,height=1,text="CLOSE",
                     fg="black",
                     bg=accent_color,
