@@ -78,5 +78,5 @@ Answer Their will be more color in another release
 
 #### *Q You said no one can see our file but the can open XMANAGER and can delete or can see our files because it don't have any security lock...*
 
-Answer We will be adding lock in 1.2 release
+Answer It's there check out the v1.2 release
 
